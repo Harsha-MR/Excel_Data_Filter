@@ -11,13 +11,13 @@ const columns = ['CategoryShortName', 'BranchAlias', 'SupplierAlias']
 function FilterSection({ filename, onSearch }) {
   const [filters, setFilters] = useState({
     CategoryShortName: [],
-    BranchAlilas: [],
+    BranchAlias: [],
     SupplierAlias: []
   })
 
   const [options, setOptions] = useState({
     CategoryShortName: [],
-    BranchAlilas: [],
+    BranchAlias: [],
     SupplierAlias: []
   })
 
