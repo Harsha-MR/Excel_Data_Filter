@@ -18,13 +18,18 @@ function FilterSection({ filename, onSearch }) {
   })
 
   const handleFilterChange = (column, values) => {
-    // If "all" is selected, set value to null
+    // If "all" is selected, set value to ["all"] and clear other selections
     if (values.includes('all')) {
       setFilters(prev => ({
         ...prev,
-        [column]: []
+        [column]: ['all']
       }))
       return
+    }
+
+    // If "all" was previously selected and now selecting other values, remove "all"
+    if (filters[column].includes('all')) {
+      values = values.filter(v => v !== 'all')
     }
 
     setFilters(prev => ({
@@ -34,9 +39,9 @@ function FilterSection({ filename, onSearch }) {
   }
 
   const handleSearch = () => {
-    // Convert empty arrays to null for backend processing
+    // Convert "all" selections to null for backend processing
     const processedFilters = Object.entries(filters).reduce((acc, [key, value]) => {
-      acc[key] = value.length === 0 ? null : value
+      acc[key] = value.includes('all') ? null : value
       return acc
     }, {})
     
@@ -61,7 +66,9 @@ function FilterSection({ filename, onSearch }) {
                   <span className="block truncate">
                     {filters[column].length === 0
                       ? 'Select options'
-                      : filters[column].join(', ')}
+                      : filters[column].includes('all')
+                        ? 'All'
+                        : filters[column].join(', ')}
                   </span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownIcon
