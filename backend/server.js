@@ -60,27 +60,6 @@ app.post('/filter', (req, res) => {
   });
 });
 
-app.get('/column-values/:filename/:column', (req, res) => {
-  const { filename, column } = req.params;
-  
-  let options = {
-    mode: 'json',
-    pythonPath: 'python',
-    scriptPath: './python',
-    args: [
-      path.join(__dirname, 'uploads', filename),
-      column
-    ]
-  };
-
-  PythonShell.run('get_column_values.py', options).then(results => {
-    res.json({ values: results[0] });
-  }).catch(err => {
-    console.error(err);
-    res.status(500).json({ error: 'Error getting column values' });
-  });
-});
-
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 }); 

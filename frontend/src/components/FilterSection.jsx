@@ -1,10 +1,6 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-import { toast } from 'react-hot-toast'
+import { useState } from 'react'
 import { Listbox } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-
-const API_URL = 'http://localhost:5000'
 
 const columns = ['CategoryShortName', 'BranchAlias', 'SupplierAlias']
 
@@ -16,43 +12,13 @@ function FilterSection({ filename, onSearch }) {
   })
 
   const [options, setOptions] = useState({
-    CategoryShortName: [],
-    BranchAlias: [],
-    SupplierAlias: []
+    CategoryShortName: ['KU2PM', 'KURM', 'SKDM', 'HDB', 'PTL', 'BLS', 'PRF', 'BAN', 'BRC', 'EAR', 'NEC', 'RNG', 'SET', 'TIK', 'K2P', 'KUR', 'LAA', 'LPS', 'DRS', 'SKD', 'EMB', 'PLN', 'PTD', 'WOV', 'DUP', 'STL', 'SMT', 'SPC', 'SPE', 'SPP', 'NSP', 'PET', 'BOT', 'SHW'],
+    BranchAlias: ['01-SE', '02-GK', '03-RG', '04-NO', '05-DLF', '06-IP', '08-VK', '10-IN', '11-RP', '14-KNP', '15-LDH', '16-V3S', '17-MGF', '18-GNO', '19-DDN', '22-FBD', '23-KPV', '24-MHG', '25-DBB', '26-SSG', '30-JD2', '31-BL1', '36-BBY', '38-AG2', '39-LJP', '42-MEG', '44-RP2', '45-NO2', '47-PSN', '48-LK2', '49-RG2', '50-HAL', '52-AMB', '53-SE1', '55-GIP', '56-DHA', '59-GZB', '61-TAT', '62-MHL', '64-JBL', '65-KAM', '67-PAV', '68-BHT', '69-KUR', '71-AML', '72-MOI', '73-SRH', '75-BB4', '76-SKT', '77-PSV', '78-BSP2', '79-RO2', '80-LD3', '81-PT2', '83-NSK', '84-TLK', '85-TAT2', '87-FBD2', '88-LK3', '90-DWK', '91-LK4', '92-RRK', '93-BHL', '95-DD4', '96-ELN', 'US-04', '51-JAM', '58-RCT', '82-GRD', 'HQ1-UV', '12-PTN', '86-RNC', '29-BSP', '40-LKO', '74-NGP', '21-RO1', '43-DD2', '07-CR', '46-DD3', '57-MRT', '70-HDR', '89-FBD3', 'MB-OL1', 'US-03', '66-RDP', 'US-02', 'MB-OL2', '94-BRL', 'US-01', 'US-05'],
+    SupplierAlias: ['CAL-TRF', 'DEL-PTH', 'JPR-FLO', 'BBY-MNR', 'SUR-JJE', 'DEL-SHB', 'JPR-FLW', 'DEL-RWZ', 'VNS-SNS', 'AHD-SBT', 'JPR-BPN', 'DEL-PSM', 'DEL-KDE', 'BBY-CCN', 'BBY-RNK', 'DEL-AZH', 'BBY-EDS', 'JPR-BTP', 'LDN-ASK', 'DEL-NHA', 'DEL-APL', 'JPR-ANX', 'JPR-DFL', 'JPR-DGC', 'AHD-NIC', 'JPR-ADF', 'JPR-MNG', 'SUR-ANB', 'BBY-SCC', 'BBY-VTA', 'CAL-RZL', 'BBY-GMR', 'SUR-CHT', 'SUR-GKT', 'SUR-TTE', 'SUR-KSR', 'SUR-VTF', 'SUR-KRF', 'SUR-SUB', 'SUR-VGC', 'SUR-VRD', 'BBY-PRC', 'JPR-ART', 'SUR-KRS', 'SUR-SCF', 'BBY-RAD', 'CAL-FND', 'CAL-SNS', 'BBY-RMC', 'BBY-MNS', 'DEL-SRE', 'DEL-CTS', 'CAL-CNR', 'CAL-KAN', 'CAL-MDS', 'CAL-DWF', 'SUR-RCF', 'SUR-RSE', 'SUR-SPD', 'DEL-ARD', 'CAL-ASH', 'CAL-GSK', 'CAL-SRT', 'CAL-DBR', 'CAL-GMS', 'CAL-EKM', 'SUR-RMC', 'JPR-GDS', 'SUR-RLF', 'CAL-RGD', 'SUR-TNK', 'SUR-VSN', 'SUR-KIA', 'SUR-AMS', 'SUR-ARZ', 'SUR-MJF', 'SUR-SET', 'BBY-DPC', 'BLR-RDF', 'BLR-SNS', 'SUR-APF', 'SUR-NTF', 'VNS-JDS', 'SUR-VNA', 'BLR-MSS', 'BLR-SMM', 'VNS-GSS', 'JPR-NFH', 'BLR-MKK', 'DEL-SPE', 'SUR-ISH', 'SUR-SSC', 'AHD-NVA', 'CAL-SVM', 'SUR-MNI', 'SUR-SVT', 'VNS-SCH', 'AHD-AJT', 'SUR-SMD', 'JPR-NCR', 'SUR-SSF', 'VNS-RDH', 'SUR-AYN', 'SUR-UVS', 'BBY-SLC', 'SUR-VFS', 'AHD-NUT', 'BLR-KSS', 'BLR-MAD', 'BLR-MMS', 'SUR-NLX', 'VNS-VVD', 'BLR-SSS', 'VNS-BHH', 'VNS-KSS', 'GUJ-MGM', 'BLR-BDS', 'SUR-VBT', 'VNS-JKP', 'VNS-PSC', 'CJB-MHV', 'SUR-MRD', 'VNS-HRD', 'VNS-ZBD', 'BLR-SKS', 'MAA-TSS', 'VNS-SND', 'BBY-JBS', 'LDN-SGR', 'AHD-KDC', 'AHD-KRE', 'CAL-AMB', 'CAL-VNI', 'DEL-RSS', 'JPR-BGF', 'MAA-SHL', 'SUR-VNY', 'VNS-ARC', 'AHD-PRT', 'JPR-RCM', 'SUR-EKF', 'SUR-KFH', 'SUR-KGC', 'CAL-SSF', 'DEL-JMY', 'VNS-HNC', 'CAL-RGF', 'AHD-CLT', 'AHD-DSA', 'AHD-RTF', 'CAL-DSR', 'CAL-RAJ', 'CAL-VRM', 'CAL-LVS', 'CAL-RKC', 'CAL-JBC', 'DEL-ABH', 'DEL-MSK', 'JPR-LSA', 'DEL-KKR', 'BBY-SWN', 'AHD-KGM', 'BBY-KBI', 'BBY-GOP', 'BBY-PVF', 'SUR-RDC', 'SUR-SYS', 'CAL-NLM', 'SUR-NCR', 'CAL-SNH', 'HYD-KNT', 'MHR-GTH', 'DEL-HSH', 'SUR-DAS', 'SUR-SDF', 'SUR-MNR', 'SUR-RVA', 'DEL-MTR', 'BBY-IQR', 'DEL-DFN', 'DEL-BBF', 'SUR-PVC', 'SUR-SKW', 'SUR-SAE', 'BLR-NMD', 'SUR-BLC', 'VNS-KOR', 'SUR-VLT', 'CHN-GPS', 'MAA-TSW', 'SUR-SNJ']
   })
 
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    const fetchColumnValues = async () => {
-      setLoading(true)
-      try {
-        const results = await Promise.all(
-          columns.map(column =>
-            axios.get(`${API_URL}/column-values/${filename}/${column}`)
-          )
-        )
-
-        const newOptions = {}
-        results.forEach((result, index) => {
-          // Keep all values, including duplicates
-          newOptions[columns[index]] = result.data.values
-        })
-        setOptions(newOptions)
-      } catch (error) {
-        toast.error('Error fetching column values')
-        console.error(error)
-      }
-      setLoading(false)
-    }
-
-    if (filename) {
-      fetchColumnValues()
-    }
-  }, [filename])
-
   const handleFilterChange = (column, values) => {
-    // If "all" is selected, clear other selections
+    // If "all" is selected, set value to null
     if (values.includes('all')) {
       setFilters(prev => ({
         ...prev,
@@ -68,7 +34,13 @@ function FilterSection({ filename, onSearch }) {
   }
 
   const handleSearch = () => {
-    onSearch(filters)
+    // Convert empty arrays to null for backend processing
+    const processedFilters = Object.entries(filters).reduce((acc, [key, value]) => {
+      acc[key] = value.length === 0 ? null : value
+      return acc
+    }, {})
+    
+    onSearch(processedFilters)
   }
 
   return (
@@ -89,7 +61,7 @@ function FilterSection({ filename, onSearch }) {
                   <span className="block truncate">
                     {filters[column].length === 0
                       ? 'Select options'
-                      : `${filters[column].length} selected`}
+                      : filters[column].join(', ')}
                   </span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownIcon
@@ -120,7 +92,7 @@ function FilterSection({ filename, onSearch }) {
                       </>
                     )}
                   </Listbox.Option>
-                  {options[column].map((value, index) => (
+                  {Array.isArray(options[column]) && options[column].map((value, index) => (
                     <Listbox.Option
                       key={`${value}-${index}`}
                       value={value}
@@ -154,17 +126,9 @@ function FilterSection({ filename, onSearch }) {
       <div className="flex justify-center">
         <button
           onClick={handleSearch}
-          disabled={loading}
           className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors duration-200"
         >
-          {loading ? (
-            <>
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-              Loading...
-            </>
-          ) : (
-            'Search'
-          )}
+          Search
         </button>
       </div>
     </div>
