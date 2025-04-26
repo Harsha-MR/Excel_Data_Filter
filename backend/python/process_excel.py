@@ -12,21 +12,29 @@ def convert_to_serializable(value):
 
 def filter_excel(file_path, filters):
     try:
-        # Read the Excel file
-        df = pd.read_excel(file_path)
+        # Read the Excel file with optimized settings
+        df = pd.read_excel(
+            file_path,
+            engine='openpyxl',
+            dtype=str,  # Read all columns as strings for faster processing
+            na_filter=False  # Disable NA filtering for better performance
+        )
         
         # Apply filters if they exist and are not null
         for column, values in filters.items():
             if values is not None and len(values) > 0:
-                df = df[df[column].isin(values)]
+                # Convert values to set for faster lookups
+                value_set = set(values)
+                df = df[df[column].isin(value_set)]
         
         # Convert DataFrame to list of dictionaries with serializable values
-        result = []
-        for _, row in df.iterrows():
-            row_dict = {}
-            for column in df.columns:
-                row_dict[column] = convert_to_serializable(row[column])
-            result.append(row_dict)
+        # Use vectorized operations instead of iterating
+        result = df.to_dict('records')
+        
+        # Convert values to serializable format
+        for row in result:
+            for key, value in row.items():
+                row[key] = convert_to_serializable(value)
         
         return result
     except Exception as e:
